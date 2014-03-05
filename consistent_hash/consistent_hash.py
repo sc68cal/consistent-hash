@@ -44,7 +44,7 @@ class ConsistentHash(object):
     def _ingest_objects(self, objects):
         try:
             if isinstance(objects, dict):
-                self.nodes.extend(objects.keys())
+                self.nodes.extend(list(objects.keys()))
                 self.weights.update(objects.copy())
             elif isinstance(objects, list):
                 self.nodes.extend(objects[:])
@@ -116,9 +116,9 @@ class ConsistentHash(object):
 
         factor = self.interleave_count * weight
 
-        for j in xrange(0, int(factor)):
+        for j in range(0, int(factor)):
             b_key = self._hash_digest('%s-%s' % (node, j))
-            for i in xrange(0, 3):
+            for i in range(0, 3):
                 yield self._hash_val(b_key, lambda x: x+i*4)
 
     def get_node(self, string_key):
@@ -149,7 +149,7 @@ class ConsistentHash(object):
  
     def get_all_nodes(self):
         # Sorted with ascend
-        return sorted(self.nodes, key=lambda node:map(int, re.split('\W', node)))
+        return sorted(self.nodes, key=lambda node:list(map(int, re.split('\W', node))))
     
     def get_nodes_cnt(self):
         return len(self.nodes)
@@ -174,11 +174,11 @@ class ConsistentHash(object):
 
     def _hash_digest(self, key):
         if self.hasher != None:
-            res = map(ord, self.hasher(key))
+            res = list(map(ord, self.hasher(key)))
         else:
             m = hashlib.md5()
             m.update(key)
-            res = map(ord, m.digest())
+            res = list(map(ord, m.digest()))
 
         return res
 
