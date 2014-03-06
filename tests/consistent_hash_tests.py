@@ -147,6 +147,6 @@ class TestConsistentHash:
     def gen_random_objs(cls, num=10000, len=10):
         objs = []
         for i in range(num):
-            chars = string.letters + string.digits
+            chars = string.ascii_letters + string.digits
             objs.append(''.join([random.choice(chars) for i in range(len)]))
         return objs
