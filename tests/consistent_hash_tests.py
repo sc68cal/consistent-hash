@@ -14,7 +14,7 @@ class TestConsistentHash:
     @classmethod
     def setup_class(cls):
         cls.objs = cls.gen_random_objs()
-        print 'Initial nodes {nodes}'.format(nodes=cls.init_nodes)
+        print('Initial nodes {nodes}'.format(nodes=cls.init_nodes))
 
     @classmethod
     def teardown_class(cls):
@@ -82,7 +82,7 @@ class TestConsistentHash:
             '192.168.0.101:11212': (17, 23),
             '192.168.0.103:11212': (17, 23)
         })
-        print '->The {nodes} added!!!'.format(nodes=add_nodes)
+        print('->The {nodes} added!!!'.format(nodes=add_nodes))
 
     def test_del_nodes(self):
         self.con_hash = ConsistentHash(self.init_nodes)
@@ -100,17 +100,17 @@ class TestConsistentHash:
             '192.168.0.101:11212': (48, 52),
             '192.168.0.103:11212': (48, 52)
         })
-        print '->The {nodes} deleted!!!'.format(nodes=del_nodes)
+        print('->The {nodes} deleted!!!'.format(nodes=del_nodes))
 
     # -------------Help functions-------------
     def show_nodes_balance(self):
         distribution = {}
-        print '-'*67
-        print 'Nodes count:{nNodes} Objects count:{nObjs}'.format(
+        print('-'*67)
+        print('Nodes count:{nNodes} Objects count:{nObjs}'.format(
                 nNodes = self.con_hash.get_nodes_cnt(),
                 nObjs = len(self.objs)
-            )
-        print '-'*27 + 'Nodes balance' + '-'*27
+            ))
+        print('-'*27 + 'Nodes balance' + '-'*27)
         for node in self.con_hash.get_all_nodes():
             substitutions = {
                 'nNodes': node,
@@ -118,7 +118,7 @@ class TestConsistentHash:
                 'percentage': self.get_percent(self.hit_nums[node], self.obj_nums)
             }
 
-            print 'Nodes:{nNodes} - Objects count:{nObjs} - percent:{percentage}%'.format(**substitutions)
+            print('Nodes:{nNodes} - Objects count:{nObjs} - percent:{percentage}%'.format(**substitutions))
 
             distribution[node] = substitutions['percentage']
 
@@ -126,19 +126,19 @@ class TestConsistentHash:
 
 
     def validate_distribution(self, actual, expected):
-        if expected.keys() != actual.keys():
+        if list(expected.keys()) != list(actual.keys()):
             raise Exception("Expected nodes does not match actual nodes")
 
-        for i in expected.keys():
+        for i in list(expected.keys()):
             actual_value = actual[i]
             min_value = expected[i][0]
             max_value = expected[i][1]
 
             if actual_value < min_value or actual_value > max_value:
-                print min_value, actual_value, max_value
+                print(min_value, actual_value, max_value)
                 raise Exception("Value outside of expected range")
 
-        print "Validated ranges"
+        print("Validated ranges")
 
     def get_percent(self, num, sum):
         return int(float(num) / sum * 100)
