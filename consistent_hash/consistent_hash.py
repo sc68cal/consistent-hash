@@ -177,8 +177,8 @@ class ConsistentHash(object):
             res = list(map(ord, self.hasher(key)))
         else:
             m = hashlib.md5()
-            m.update(key)
-            res = list(map(ord, m.digest()))
+            m.update(key.encode('utf-8'))
+            res = list(m.digest())
 
         return res
 
